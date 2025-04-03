@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import model.Article;
 import model.Book;
 import model.User;
 
@@ -95,8 +96,47 @@ public class OracleDBConnection {
         }
     }
     
+ 
+    public ArrayList<Article> fetchArticles() throws SQLException {
+        ArrayList<Article> articles = new ArrayList<>();
+        String query = "SELECT Title, Author, ISSN, Year, Available FROM Article";
+        
+        try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            
+            while (rs.next()) {
+                String title = rs.getString("Title");
+                String author = rs.getString("Author");
+                String issn = rs.getString("ISSN");
+                int year = rs.getInt("Year");
+                boolean available = rs.getBoolean("Available");
+                
+                articles.add(new Article(title, author, issn, year, available));
+            }
+        }
+        return articles;
+    }
+
+   
+    public void insertArticle(Article article) throws SQLException {
+        String query = "INSERT INTO Article (Title, Author, ISSN, Year, Available) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, article.getTitle());
+            pstmt.setString(2, article.getAuthor());
+            pstmt.setString(3, article.getISSN());
+            pstmt.setInt(4, article.getYear());
+            pstmt.setBoolean(5, article.isAvailable());
+
+            pstmt.executeUpdate();
+        }
+    }
     
- // Method to insert a new user into the database
+    
+ 
     public void insertUser(User user) throws SQLException {
         String query = "INSERT INTO UserAdmin (Nickname, Password) VALUES (?, ?)";
 

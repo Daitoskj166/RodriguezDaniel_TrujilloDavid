@@ -43,7 +43,7 @@ public class InicioSesionController {
             return;
         }
 
-        // Validar las credenciales contra la lista de usuarios registrados
+        
         boolean credencialesValidas = false;
         for (User usuario : userManager.getUsers()) {
             if (usuario.validarCredenciales(nombreUsuario, contraseña)) {
@@ -53,7 +53,7 @@ public class InicioSesionController {
         }
 
         if (credencialesValidas) {
-            Main.loadScene("/view/MenuBook.fxml");
+            Main.loadScene("/view/MenuSelection.fxml"); 
         } else {
             mostrarAlerta("Error", "Credenciales incorrectas", "El nombre de usuario o la contraseña son incorrectos.");
         }
