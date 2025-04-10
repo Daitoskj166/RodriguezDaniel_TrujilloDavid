@@ -65,7 +65,7 @@ public class MenuArticleController {
                 return;
             }
 
-            for (Article article : articleManager.getArticles()) {
+            for (Article article : articleManager.getAvailableArticles()) {
                 if (article.getISSN().equals(issnStr)) {
                     mostrarAlerta("Error", "ISSN repetido", "El ISSN ya está registrado.");
                     return;
@@ -73,7 +73,7 @@ public class MenuArticleController {
             }
 
             Article article = new Article(titulo, autor, issnStr, año, disponible);
-            articleManager.addArticle(article);
+            articleManager.save(article);
             mostrarAlerta("Éxito", "Artículo registrado", "El artículo se ha registrado correctamente.");
             limpiarCampos();
         } catch (NumberFormatException e) {

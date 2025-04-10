@@ -40,7 +40,7 @@ public class MenuBookController {
     
 
     @FXML
-    void registerBook(ActionEvent event) {
+    void registerBook(ActionEvent event) throws Exception {
         String titulo = txtTitle.getText().trim();
         String autor = txtAuthor.getText().trim();
         String añoStr = txtYear.getText().trim();
@@ -66,7 +66,7 @@ public class MenuBookController {
                 return;
             }
 
-            for (Book book : bookManager.getBooks()) {
+            for (Book book : bookManager.getAvailableBooks()) {
                 if (book.getISBN() == ISBN) {
                     mostrarAlerta("Error", "ISBN repetido", "El ISBN ya está registrado.");
                     return;
@@ -74,7 +74,7 @@ public class MenuBookController {
             }
 
             Book book = new Book(titulo, autor, ISBN, año, disponible);
-            bookManager.addBook(book);
+            bookManager.save(book);
             mostrarAlerta("Éxito", "Libro registrado", "El libro se ha registrado correctamente.");
             limpiarCampos();
         } catch (NumberFormatException e) {

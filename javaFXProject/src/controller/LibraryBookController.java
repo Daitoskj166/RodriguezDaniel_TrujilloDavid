@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,6 +25,9 @@ public class LibraryBookController {
     private Button btnMenup;
 
     @FXML
+    private Button btnDelete;  // El botón para eliminar
+
+    @FXML
     private TableColumn<Book, String> colAuthor;
 
     @FXML
@@ -40,7 +44,7 @@ public class LibraryBookController {
     @FXML
     public void initialize() {
         ObservableList<Book> books = FXCollections.observableArrayList();
-        for(Book book:bookManager.getBooks()) {
+        for(Book book: bookManager.getAvailableBooks()) {
             if(book.isDisponible()) {
                 books.add(book);
             }
@@ -62,4 +66,31 @@ public class LibraryBookController {
     void goToMenuSelection(ActionEvent event) { 
         Main.loadScene("/view/MenuSelection.fxml"); 
     }
+
+    // Método para eliminar el libro seleccionado
+    @FXML
+    void deleteBook(ActionEvent event) {
+        Book selectedBook = tableview.getSelectionModel().getSelectedItem();
+        
+        if (selectedBook != null) {
+            try {
+                bookManager.delete(selectedBook.getISBN());
+                tableview.getItems().remove(selectedBook);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            showErrorMessage("No se seleccionó ningún libro para eliminar.");
+        }
+    }
+
+    // Método para mostrar un mensaje de error con un Alert
+    private void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Operación no completada");
+        alert.setContentText(message); 
+        alert.showAndWait(); 
+    }
 }
+

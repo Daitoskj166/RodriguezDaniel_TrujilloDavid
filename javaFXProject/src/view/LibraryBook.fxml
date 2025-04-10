@@ -39,4 +39,10 @@
             <DropShadow color="#c0392b" radius="3" />
         </effect>
     </Button>
+    <Button fx:id="btnDelete" onAction="#deleteBook" prefHeight="40" prefWidth="300" style="-fx-font-size: 16; -fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 5;" text="Eliminar Libro">
+        <effect>
+            <DropShadow color="#d35400" radius="3" />
+        </effect>
+    </Button>
 </VBox>
+
